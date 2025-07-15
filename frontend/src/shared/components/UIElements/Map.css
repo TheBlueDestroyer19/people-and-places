@@ -1,0 +1,22 @@
+/* Map.css */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+.map-container {
+  width: 100%;
+  height: 400px; /* or any height you want for the modal map */
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
