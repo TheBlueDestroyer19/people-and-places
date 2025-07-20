@@ -47,7 +47,7 @@ const AuthPage = props => {
                     'POST', 
                     formData                    
                 );                
-                auth.login(resData.user.id);
+                auth.login(resData.userID, resData.token);
                 
             } catch(err) {}
         } else {
@@ -62,7 +62,7 @@ const AuthPage = props => {
                         'Content-Type':'application/json'
                     }
                 );
-                auth.login(resData.user.id);
+                auth.login(resData.userID, resData.token);
             } catch(err) {}
         }
     };

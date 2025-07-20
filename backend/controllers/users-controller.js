@@ -26,11 +26,13 @@ const createUser = async (req,res,next) => {
     if(existingUser) 
         return next(new HttpError("A user with this email ID already exists!",500));
 
+    let hashedPwd;
     try{
-        let hashedPwd = await bcrypt.hash(password, 12);
+        hashedPwd = await bcrypt.hash(password, 12);
     } catch(err) {
         return next(new HttpError("Could not create a user!",404));
     }
+
 
     const createdUser = new User({
         name,
@@ -43,7 +45,7 @@ const createUser = async (req,res,next) => {
     try {
         await createdUser.save();
     } catch(error) {
-        return next(new HttpError("Something went wrong! Please try again later!",500));
+        return next(new HttpError("Saving failed!",500));
     }
 
     let token;
@@ -57,7 +59,7 @@ const createUser = async (req,res,next) => {
         return next(new HttpError("Could not signup!!"));
     }
 
-    res.status(200).json({user: createdUser.id, email: createdUser.email, token:token});
+    res.status(200).json({userID: createdUser.id, email: createdUser.email, token:token});
 };
 
 const authenticateUser = async (req,res,next) => {

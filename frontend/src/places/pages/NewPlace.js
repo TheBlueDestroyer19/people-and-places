@@ -49,7 +49,9 @@ const NewPlace=props=>{
             formData.append('image',formState.inputs.image.value);   
             formData.append('creator',auth.userID);   
 
-            await sendRequest("http://localhost:5000/api/places", "POST",formData); 
+            await sendRequest("http://localhost:5000/api/places", "POST",formData,{
+                Authorization: "Bearer "+auth.token
+            }); 
 
             hist.push('/');
         } catch(err) {}

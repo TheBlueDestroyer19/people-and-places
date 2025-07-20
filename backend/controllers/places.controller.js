@@ -97,6 +97,14 @@ const updatePlace = async (req, res, next) => {
     const id = req.params.pid;
     let place;
     try{
+        place=await Place.findById(id);
+        if(place.creator.toString()!==req.userData.userID)
+            return next(new HttpError("You are not authorized to make any changes here!!", 401));
+    } catch(err) {
+        return next(new HttpError("Something went wrong. Please try again later!",500));
+    }
+
+    try{
         place=await Place.findByIdAndUpdate(id,{title,description},{new:true,runValidators:true});
     } catch(error) {
         return next(new HttpError("Something went wrong. Please try again later!",500));
@@ -111,12 +119,15 @@ const deletePlace = async (req, res, next) => {
 
     try{
         place = await Place.findById(id).populate("creator");
+        if(!place) 
+            return next(new HttpError("Could not find the place!",404));
+        else if(place.creator.id!==req.userData.userID)
+            return next(new HttpError("You are not authorized to make any changes here!!", 401));
+
     } catch(err) {
         return next(new HttpError("Something went wrong. Please try again later!",500));
     }
-
-    if(!place) 
-        return next(new HttpError("Could not find the place!",404));
+    
 
     try{
         const session = await mongoose.startSession();
